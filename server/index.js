@@ -10,7 +10,7 @@ const app = express();
 dotenv.config();
 app.use(cors(
   {
-     origin: ["https://deploy-mern-frontend.vercel.app"],
+     origin: ["https://user-task-management-frontend.vercel.app"],
      methods: ["POST", "GET"],
      credentials: true
   }
