@@ -1,5 +1,5 @@
 import axios from 'axios'
-const URL = "https://user-task-management-backend.vercel.app/";
+const URL = "https://user-task-management-backend.vercel.app";
 export const addUser = async(data)=>{
     try {
         return await axios.post(`${URL}/addUser`,data)
