@@ -15,6 +15,9 @@ app.use(cors(
      credentials: true
   }
 ));
+app.get("/", (req, res) => {
+    res.json("Hello");
+})
 app.use(express.json());
 app.use(bodyParser.json())
 app.use(express.urlencoded({extended: true}))
