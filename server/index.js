@@ -8,7 +8,13 @@ import bodyParser from 'body-parser';
 
 const app = express();
 dotenv.config();
-app.use(cors());
+app.use(cors(
+  {
+     origin: ["https://deploy-mern-frontend.vercel.app"],
+     methods: ["POST", "GET"],
+     credentials: true
+  }
+));
 app.use(express.json());
 app.use(bodyParser.json())
 app.use(express.urlencoded({extended: true}))
