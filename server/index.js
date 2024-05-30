@@ -11,7 +11,8 @@ dotenv.config();
 app.use(cors(
   {
      origin: ["https://user-task-management-frontend.vercel.app"],
-     methods: ["POST", "GET"],
+     methods: ["POST", "GET","PUT","DELETE"],
+     headers: "Content-Type, Authorization",
      credentials: true
   }
 ));
