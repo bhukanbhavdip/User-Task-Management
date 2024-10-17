@@ -7,6 +7,7 @@ const Home = () => {
                 <div className="card mx-auto" style={{width: "18rem"}}>
                 <img className="card-img-top" src={logo} alt="Card" />
                 </div>
+    // added comments in home page
                 <div className="card-body">
                     <h5 className="card-title">User Task Mangement</h5>
                     <p className="card-text">The management of users and their assigned tasks within a specific department is the focus of this website. We can add new users to this website and assign them new tasks as well. Additionally, we are able to view every aspect of the users and their assignments.</p>
