@@ -14,7 +14,7 @@ function App() {
       <BrowserRouter>
       <Navbar/>
         <Routes>
-          <Route path='/add-task' element={<Home/>}/>
+          <Route path='/' element={<Home/>}/>
           <Route path='/add-task' element={<AddTask/>}/>
           <Route path='/add-user' element={<AddUser/>}/>
           <Route path='/task-list' element={<TaskList/>}/>
