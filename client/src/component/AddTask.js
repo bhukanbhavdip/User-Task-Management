@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addTask } from '../service/api';
+import { addTask, getUsers } from '../service/api';
 
 const defaultValue = {
   taskname: '',
-  username: '',
+  username: '', // This will be the selected user ID
 };
 
 const AddTask = () => {
   const [task, setTask] = useState(defaultValue);
+  const [users, setUsers] = useState([]); // State to hold users
   const navigate = useNavigate();
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const response = await getUsers();
+      if (response && response.data) {
+        setUsers(response.data); // Assuming the user data is in response.data
+      }
+    };
+
+    fetchUsers();
+  }, []); // Empty dependency array ensures this runs once on component mount
 
   const onValueChange = (e) => {
     setTask({ ...task, [e.target.name]: e.target.value });
-    console.log(task);
   };
 
   const addTaskDetails = async () => {
@@ -48,16 +58,22 @@ const AddTask = () => {
               </div>
 
               <div className="mb-3">
-                <label htmlFor="username" className="form-label">
-                  Enter the Name of User:
+                <label key={users._id} htmlFor="username" className="form-label">
+                  Select User:
                 </label>
-                <input
-                  type="text"
-                  className="form-control"
+                <select
                   name="username"
-                  placeholder="User's name"
+                  className="form-select"
                   onChange={onValueChange}
-                />
+                  value={task.name} // Set the value to the selected user
+                >
+                  <option value="">Select a user</option>
+                  {users.map((user) => (
+                    <option key={user.id} value={user.name}> {/* Assuming user object has id and username */}
+                      {user.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="d-grid">

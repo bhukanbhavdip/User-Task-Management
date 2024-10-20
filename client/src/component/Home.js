@@ -20,7 +20,7 @@ const Home = () => {
                             <Card.Text>
                                 The management of users and their assigned tasks within a specific department is the focus of this website. We can add new users to this website and assign them new tasks as well. Additionally, we are able to view every aspect of the users and their assignments.
                             </Card.Text>
-                            <Button variant="primary">Learn More</Button>
+                            {/* <Button variant="primary">Learn More</Button> */}
                         </Card.Body>
                     </Card>
                 </Col>

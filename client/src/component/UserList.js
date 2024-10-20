@@ -2,26 +2,42 @@ import React, { useEffect, useState } from 'react';
 import { getUsers, getTask, deleUser } from '../service/api';
 import { useNavigate } from 'react-router-dom';
 import Dropdown from 'react-bootstrap/Dropdown';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Make sure Bootstrap is imported
+import Spinner from 'react-bootstrap/Spinner';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const UserList = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [usersPerPage] = useState(5); // Number of users to display per page
+  const [usersPerPage] = useState(6);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getAllUsers();
   }, []);
 
   const getAllUsers = async () => {
-    let response = await getUsers();
-    setUsers(response.data);
+    setLoading(true);
+    try {
+      let response = await getUsers();
+      setUsers(response.data.reverse());
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDelete = async (id) => {
-    await deleUser(id);
-    getAllUsers();
+    setLoading(true);
+    try {
+      await deleUser(id);
+      await getAllUsers();
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getSingleTaskDetails = async (id) => {
@@ -47,9 +63,18 @@ const UserList = () => {
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
 
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
+    );
+  }
+
   return (
     <div className="container my-5">
-      {/* Sort Dropdown */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h3 className="text-primary">User Management</h3>
         <Dropdown>
@@ -63,7 +88,6 @@ const UserList = () => {
         </Dropdown>
       </div>
 
-      {/* Users List (Responsive Card Design) */}
       <div className="row">
         {currentUsers.map((user) => (
           <div className="col-12 col-md-6 col-lg-4 mb-4" key={user._id}>
@@ -95,7 +119,6 @@ const UserList = () => {
         ))}
       </div>
 
-      {/* Pagination */}
       <nav>
         <ul className="pagination justify-content-center">
           {Array.from({ length: Math.ceil(users.length / usersPerPage) }, (_, index) => (

@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { getTasks } from '../service/api';
 import Multiselect from 'multiselect-react-dropdown';
 import Dropdown from 'react-bootstrap/Dropdown';
+import Spinner from 'react-bootstrap/Spinner';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported
 
 const TaskList = () => {
@@ -10,20 +11,26 @@ const TaskList = () => {
   const [selectedUsernames, setSelectedUsernames] = useState([]);
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [tasksPerPage] = useState(5);
+  const [tasksPerPage] = useState(6);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getAllTasks();
   }, []);
 
   const getAllTasks = async () => {
-    const response = await getTasks();
-    setTasks(response.data);
-
-    const uniqueUsernames = Array.from(new Set(response.data.map(task => task.username)));
-    setUsernames(uniqueUsernames);
-    setSelectedUsernames(uniqueUsernames); // Select all by default
+    try {
+        const response = await getTasks();
+        setTasks(response.data.reverse());
+        const uniqueUsernames = Array.from(new Set(response.data.map(task => task.username)));
+        setUsernames(uniqueUsernames);
+        setSelectedUsernames(uniqueUsernames); // Select all by default
+    } catch (error) {
+        console.error('Error fetching users:', error);
+    } finally {
+        setLoading(false);
+    } 
   };
 
   const filterTasks = useCallback(() => {
@@ -67,6 +74,16 @@ const TaskList = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
+    );
+  }
 
   return (
     <div className="container my-5">

@@ -12,7 +12,6 @@ const SingleUserTaskList = () => {
     const loadTaskDetails = async () => {
       try {
         let response = await getTask(id);
-        console.log('Response data:', response.data);
         setTasks(response.data);
       } catch (error) {
         console.error('Error loading task details:', error);
